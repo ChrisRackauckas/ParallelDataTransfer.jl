@@ -1,9 +1,12 @@
 # ParallelDataTransfer.jl
 
-A bunch of helper functions for transferring data between worker processes.
-Credit goes to [the StackExchange users who developed the solution.](http://stackoverflow.com/questions/27677399/julia-how-to-copy-data-to-another-processor-in-julia).
+[![Build Status](https://travis-ci.org/ChrisRackauckas/ParallelDataTransfer.jl.svg?branch=master)](https://travis-ci.org/ChrisRackauckas/ParallelDataTransfer.jl)
+[![Build status](https://ci.appveyor.com/api/projects/status/c8tqjhxx9679gl6u?svg=true)](https://ci.appveyor.com/project/ChrisRackauckas/paralleldatatransfer-jl)
 
-This package adds some tests to ensure that these functions continue to work.
+A bunch of helper functions for transferring data between worker processes.
+Credit goes to [the StackExchange users who developed the solution.](http://stackoverflow.com/questions/27677399/julia-how-to-copy-data-to-another-processor-in-julia)
+
+This package adds some tests to ensure that these functions continue to work properly.
 
 ## Installation
 
