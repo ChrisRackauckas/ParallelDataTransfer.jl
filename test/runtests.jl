@@ -33,7 +33,7 @@ sleep(1)
   foo = 1
 end
 passobj(3, 1, :foo, from_mod=Foo)
-
+sleep(1)
 @test foo == 1
 # Pass a variable from the `Foo` module on process 1 to Main on workers
 passobj(1, workers(), :foo, from_mod=Foo)
