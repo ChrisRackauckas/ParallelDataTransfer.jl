@@ -10,8 +10,17 @@ This package adds some tests to ensure that these functions continue to work pro
 
 ## Installation
 
+To install the package, simply use:
+
+```julia
+Pkg.add("ParallelDataTransfer")
+using ParallelDataTransfer
 ```
-Pkg.clone("https://github.com/ChrisRackauckas/ParallelDataTransfer.jl")
+
+For the most up to date version, checkout master by using:
+
+```julia
+Pkg.checkout("ParallelDataTransfer")
 ```
 
 ## Usage
