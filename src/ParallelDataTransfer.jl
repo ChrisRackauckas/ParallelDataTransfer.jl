@@ -14,8 +14,9 @@ module ParallelDataTransfer
       end
   end
 
-  getfrom(p::Int, nm::Symbol; mod=Main) = fetch(@spawnat(p, getfield(mod, nm)))
-
+  macro getfrom(p, obj,mod=Main)
+    fetch(@spawnat(p,eval(Main,obj)))
+  end
 
   function passobj(src::Int, target::Vector{Int}, nm::Symbol;
                    from_mod=Main, to_mod=Main)
@@ -54,5 +55,5 @@ module ParallelDataTransfer
       end
   end
 
-  export sendtosimple, @sendto, sendto, getfrom, passobj, @broadcast
+  export sendtosimple, @sendto, sendto, getfrom, passobj, @broadcast, @getfrom
 end # module

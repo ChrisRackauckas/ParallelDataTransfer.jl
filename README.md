@@ -35,7 +35,10 @@ sendto([1, 2], x=100, y=rand(2, 3))
 z = randn(10, 10); sendto(workers(), z=z)
 
 # get an object from named x from Main module on process 2. Name it x
-x = getfrom(2, :x)
+x = @getfrom(2, x)
+
+# get an object from named x from Foo module on process 2. Name it x
+x = @getfrom(2,x,Foo)
 
 # pass variable named x from process 2 to all other processes
 passobj(2, filter(x->x!=2, procs()), :x)
