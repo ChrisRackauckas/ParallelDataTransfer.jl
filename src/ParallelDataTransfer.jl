@@ -33,7 +33,7 @@ module ParallelDataTransfer
       r = RemoteRef(src)
       @spawnat(src, put!(r, eval(nm,from_mod)))
       target_vec = eval(target)
-      println(target_vec)
+
       for to in target_vec
           @spawnat(to, eval(to_mod, Expr(:(=), nm, fetch(r))))
       end
