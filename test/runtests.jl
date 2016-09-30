@@ -17,15 +17,18 @@ x = @getfrom(2, z)
 # pass variable named x from process 2 to all other processes
 @spawnat 2 eval(:(x=1))
 passobj(2, filter(x->x!=2, procs()), :x)
-sleep(1)
 @test x==1
+
+@spawnat 3 eval(:(x=3))
+@passobj(3, filter(x->x!=2, procs()), x)
+#@test x==3
+
 # pass variables t, u, v from process 3 to process 1
 @spawnat 3 eval(:(t=1))
 @spawnat 3 eval(:(u=2))
 @spawnat 3 eval(:(v=3))
 
 passobj(3, 1, [:t, :u, :v])
-sleep(1)
 @test [t;u;v] == [1;2;3]
 
 
@@ -33,7 +36,6 @@ sleep(1)
   foo = 1
 end
 passobj(3, 1, :foo, from_mod=Foo)
-sleep(1)
 @test foo == 1
 # Pass a variable from the `Foo` module on process 1 to Main on workers
 passobj(1, workers(), :foo, from_mod=Foo)

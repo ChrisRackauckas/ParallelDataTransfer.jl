@@ -22,7 +22,19 @@ module ParallelDataTransfer
                    from_mod=Main, to_mod=Main)
       r = RemoteRef(src)
       @spawnat(src, put!(r, getfield(from_mod, nm)))
-      for to in target
+      @sync for to in target
+          @spawnat(to, eval(to_mod, Expr(:(=), nm, fetch(r))))
+      end
+      nothing
+  end
+
+  macro passobj(src, target, nm,
+                   from_mod=Main, to_mod=Main)
+      r = RemoteRef(src)
+      @spawnat(src, put!(r, eval(nm,from_mod)))
+      target_vec = eval(target)
+      println(target_vec)
+      for to in target_vec
           @spawnat(to, eval(to_mod, Expr(:(=), nm, fetch(r))))
       end
       nothing
@@ -55,5 +67,5 @@ module ParallelDataTransfer
       end
   end
 
-  export sendtosimple, @sendto, sendto, getfrom, passobj, @broadcast, @getfrom
+  export sendtosimple, @sendto, sendto, getfrom, passobj, @broadcast, @getfrom, @passobj
 end # module
