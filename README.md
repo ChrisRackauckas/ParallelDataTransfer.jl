@@ -4,9 +4,6 @@
 [![Build status](https://ci.appveyor.com/api/projects/status/c8tqjhxx9679gl6u?svg=true)](https://ci.appveyor.com/project/ChrisRackauckas/paralleldatatransfer-jl)
 
 A bunch of helper functions for transferring data between worker processes.
-Credit goes to [the StackExchange users who developed the solution.](http://stackoverflow.com/questions/27677399/julia-how-to-copy-data-to-another-processor-in-julia)
-
-This package adds some tests to ensure that these functions continue to work properly.
 
 ## Installation
 
@@ -49,3 +46,11 @@ passobj(3, 1, [:t, :u, :v])
 # Pass a variable from the `Foo` module on process 1 to Main on workers
 passobj(1, workers(), [:foo]; from_mod=Foo)
 ```
+
+## Credit
+
+Credit goes to [the StackExchange users who developed the original solutions.](http://stackoverflow.com/questions/27677399/julia-how-to-copy-data-to-another-processor-in-julia).
+This package adds some tests to ensure that these functions continue to work properly,
+and adds some macros to unify the API and avoid issues that came up with original
+functions (generalizes them a bit). Special thanks to @TotalVerb and @oxinabox
+for help via Gitter.

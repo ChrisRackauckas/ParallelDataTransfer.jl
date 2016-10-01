@@ -20,7 +20,7 @@ module ParallelDataTransfer
 
   function passobj(src::Int, target::Vector{Int}, nm::Symbol;
                    from_mod=Main, to_mod=Main)
-      r = RemoteRef(src)
+      r = RemoteChannel(src)
       @spawnat(src, put!(r, getfield(from_mod, nm)))
       @sync for to in target
           @spawnat(to, eval(to_mod, Expr(:(=), nm, fetch(r))))
@@ -28,16 +28,20 @@ module ParallelDataTransfer
       nothing
   end
 
-  macro passobj(src, target, nm,
-                   from_mod=Main, to_mod=Main)
-      r = RemoteRef(src)
-      @spawnat(src, put!(r, eval(nm,from_mod)))
-      target_vec = eval(target)
-
-      for to in target_vec
-          @spawnat(to, eval(to_mod, Expr(:(=), nm, fetch(r))))
+  macro passobj(src, target, val, tomod=:Main)
+    quote
+      r = Future($(esc(src)))
+      remotecall_wait($(esc(src)), r) do r_i
+          put!(r_i, $(esc(val)))
       end
-      nothing
+      futures = map($(esc(target))) do to
+          remotecall(to, r) do r_i
+              isready(r_i)
+              eval($(esc(tomod)), Expr(:(=), $(QuoteNode(val)), fetch(r_i)))
+          end
+      end
+      map(wait, futures) #Wait till all are done
+    end
   end
 
 

@@ -19,15 +19,13 @@ x = @getfrom(2, z)
 passobj(2, filter(x->x!=2, procs()), :x)
 @test x==1
 
-@spawnat 3 eval(Main,:(x=3))
+wait(@spawnat 3 eval(Main,:(x=3)))
 xhome = @getfrom(3, x)
 @test xhome == 3
 
-#=
-# Currently fails
 @passobj(3, filter(x->x!=3, procs()), x)
 @test x==3
-=#
+
 
 # pass variables t, u, v from process 3 to process 1
 @spawnat 3 eval(:(t=1))
