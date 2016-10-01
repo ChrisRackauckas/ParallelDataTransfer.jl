@@ -1,7 +1,9 @@
 # ParallelDataTransfer.jl
 
-[![Build Status](https://travis-ci.org/ChrisRackauckas/ParallelDataTransfer.jl.svg?branch=master)](https://travis-ci.org/ChrisRackauckas/ParallelDataTransfer.jl)
-[![Build status](https://ci.appveyor.com/api/projects/status/c8tqjhxx9679gl6u?svg=true)](https://ci.appveyor.com/project/ChrisRackauckas/paralleldatatransfer-jl)
+[![Travis](https://travis-ci.org/ChrisRackauckas/ParallelDataTransfer.jl.svg?branch=master)](https://travis-ci.org/ChrisRackauckas/ParallelDataTransfer.jl)
+[![AppVeyor](https://ci.appveyor.com/api/projects/status/c8tqjhxx9679gl6u?svg=true)](https://ci.appveyor.com/project/ChrisRackauckas/paralleldatatransfer-jl)
+[![codecov](https://codecov.io/gh/ChrisRackauckas/ParallelDataTransfer.jl/branch/master/graph/badge.svg)](https://codecov.io/gh/ChrisRackauckas/ParallelDataTransfer.jl)
+[![coveralls](https://coveralls.io/repos/github/ChrisRackauckas/ParallelDataTransfer.jl/badge.svg)](https://coveralls.io/github/ChrisRackauckas/ParallelDataTransfer.jl)
 
 A bunch of helper functions for transferring data between worker processes.
 
@@ -67,8 +69,8 @@ passobj(1, workers(), [:foo]; from_mod=Foo)
 
 ## Credit
 
-Credit goes to [the StackExchange users who developed the original solutions.](http://stackoverflow.com/questions/27677399/julia-how-to-copy-data-to-another-processor-in-julia).
+Lots of credit goes to [the StackExchange users who developed some of the original solutions.](http://stackoverflow.com/questions/27677399/julia-how-to-copy-data-to-another-processor-in-julia).
 This package adds some tests to ensure that these functions continue to work properly,
-and adds some macros to unify the API and avoid issues that came up with original
-functions (generalizes them a bit). Special thanks to @TotalVerb and @oxinabox
-for help via Gitter.
+updated them to v0.5, and adds some macros to unify the API (also avoids issues
+that came up with original functions and generalizes them a bit).
+Special thanks to @TotalVerb and @oxinabox for help via Gitter.
