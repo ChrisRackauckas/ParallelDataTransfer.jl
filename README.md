@@ -31,7 +31,7 @@ sendto([1, 2], x=100, y=rand(2, 3))
 # Create a variable here, then send it everywhere else
 z = randn(10, 10); sendto(workers(), z=z)
 
-# Create the variable x with a value 3 directly on a remote process 4
+# Create the variable x with a value 3 directly on process 4
 @defineat 4 x 3
 
 # Broadcast a value 3 to x on all workers
