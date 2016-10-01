@@ -18,7 +18,23 @@ module ParallelDataTransfer
     fetch(@spawnat(p,eval(mod,obj)))
   end
 
+#=
+  macro getfrom(p, obj,mod=Main)
+    quote
+      remotecall_fetch(eval,$(esc(p)),$(esc(mod)),$(esc(obj)))
+    end
+  end
+=#
+
   getfrom(p::Int, nm::Symbol, mod::Module=Main) = fetch(@spawnat(p, getfield(mod, nm)))
+
+#=
+  macro defineat(p,name,val,mod=Main)
+    quote
+      remotecall_wait((nm,val)->eval($mod,:(nm=val)),$p,$name,$val)
+    end
+  end
+=#
 
   macro defineat(p,name,val,mod=Main)
     wait(@spawnat p eval(mod,:($name=$val)))

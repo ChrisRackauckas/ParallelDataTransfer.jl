@@ -16,6 +16,10 @@ x = @getfrom(2, z)
 y = getfrom(2, :z)
 @test y==z
 
+sendtosimple(2,:x,3)
+y = @getfrom 2 x
+@test y == 3
+
 # pass variable named x from process 2 to all other processes
 @spawnat 2 eval(:(x=1))
 passobj(2, filter(x->x!=2, procs()), :x)
