@@ -4,9 +4,12 @@ module ParallelDataTransfer
       ref = @spawnat(p, eval(Main, Expr(:(=), nm, val)))
   end
 
+#=
+# Fails if $nm isn't locally defined. Not safe.
   macro sendto(p, nm, val)
       return :( sendtosimple($p, $nm, $val) )
   end
+=#
 
   function sendto(p::Int; args...)
       for (nm, val) in args
