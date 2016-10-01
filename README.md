@@ -25,25 +25,43 @@ Pkg.checkout("ParallelDataTransfer")
 For examples of usage, please see the tests.
 
 ```julia
-# creates an integer x and Matrix y on processes 1 and 2
+# Creates an integer x and Matrix y on processes 1 and 2
 sendto([1, 2], x=100, y=rand(2, 3))
 
-# create a variable here, then send it everywhere else
+# Create a variable here, then send it everywhere else
 z = randn(10, 10); sendto(workers(), z=z)
 
-# get an object from named x from Main module on process 2. Name it x
-x = @getfrom(2, x)
+# Create the variable x with a value 3 directly on a remote process 4
+@defineat 4 x 3
 
-# get an object from named x from Foo module on process 2. Name it x
-x = @getfrom(2,x,Foo)
+# Broadcast a value 3 to x on all workers
+@broadcast x 3
+
+# Get an object from named x from Main module on process 2. Name it x
+x = @getfrom 2 x
+# Or
+x = getfrom(2,:x)
+
+# Get an object from named x from Foo module on process 2. Name it x
+x = @getfrom 2 x Foo
+# Or
+x = getfrom(2,:x,Foo)
+
+# Get an object from named foo.x from Foo module on process 2. Name it x
+x = @getfrom 2 foo.x Foo
+# Using the function will not work!
 
 # pass variable named x from process 2 to all other processes
+@passobj 2  filter(x->x!=2, procs())  x
+# Or
 passobj(2, filter(x->x!=2, procs()), :x)
 
 # pass variables t, u, v from process 3 to process 1
 passobj(3, 1, [:t, :u, :v])
 
 # Pass a variable from the `Foo` module on process 1 to Main on workers
+@passobj 1 workers() Foo.foo
+#Or
 passobj(1, workers(), [:foo]; from_mod=Foo)
 ```
 

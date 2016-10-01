@@ -15,7 +15,13 @@ module ParallelDataTransfer
   end
 
   macro getfrom(p, obj,mod=Main)
-    fetch(@spawnat(p,eval(Main,obj)))
+    fetch(@spawnat(p,eval(mod,obj)))
+  end
+
+  getfrom(p::Int, nm::Symbol, mod::Module=Main) = fetch(@spawnat(p, getfield(mod, nm)))
+
+  macro defineat(p,name,val,mod=Main)
+    wait(@spawnat p eval(mod,:($name=$val)))
   end
 
   function passobj(src::Int, target::Vector{Int}, nm::Symbol;
@@ -28,13 +34,18 @@ module ParallelDataTransfer
       nothing
   end
 
-  macro passobj(src, target, val, tomod=:Main)
+  macro passobj(src::Int, target, val, tomod=:Main)
     quote
       r = Future($(esc(src)))
       remotecall_wait($(esc(src)), r) do r_i
           put!(r_i, $(esc(val)))
       end
-      futures = map($(esc(target))) do to
+      if typeof($(esc(target))) <: AbstractArray
+        target_vec = $(esc(target))
+      else
+        target_vec = [$(esc(target))]
+      end
+      futures = map(target_vec) do to
           remotecall(to, r) do r_i
               isready(r_i)
               eval($(esc(tomod)), Expr(:(=), $(QuoteNode(val)), fetch(r_i)))
@@ -65,11 +76,10 @@ module ParallelDataTransfer
 
   macro broadcast(nm, val)
       quote
-      @sync for p in workers()
-          @async sendtosimple(p, $nm, $val)
-      end
+        sendto(workers(), $nm=$val)
       end
   end
 
-  export sendtosimple, @sendto, sendto, getfrom, passobj, @broadcast, @getfrom, @passobj
+  export sendtosimple, @sendto, sendto, getfrom, passobj,
+         @broadcast, @getfrom, @passobj, @defineat
 end # module
