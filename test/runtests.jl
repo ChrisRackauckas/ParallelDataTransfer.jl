@@ -8,11 +8,12 @@ sendto([1, 2], x=100, y=rand(2, 3))
 abs(remotecall_fetch(getindex,2,y,1,1) - .260) < 1e-2
 # create a variable here, then send it everywhere else
 z = randn(10, 10); sendto(workers(), z=z)
-@everywhere println(z)
+#@everywhere println(z)
 
 # get an object from named x from Main module on process 2. Name it x
 x = @getfrom(2, z)
 @test x==z
+
 y = getfrom(2, :z)
 @test y==z
 

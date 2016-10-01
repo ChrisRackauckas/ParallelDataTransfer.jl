@@ -4,30 +4,21 @@ module ParallelDataTransfer
       ref = @spawnat(p, eval(Main, Expr(:(=), nm, val)))
   end
 
-#=
-# Fails if $nm isn't locally defined. Not safe.
-  macro sendto(p, nm, val)
-      return :( sendtosimple($p, $nm, $val) )
-  end
-=#
-
   function sendto(p::Int; args...)
       for (nm, val) in args
           @spawnat(p, eval(Main, Expr(:(=), nm, val)))
       end
   end
 
-  macro getfrom(p, obj,mod=Main)
-    fetch(@spawnat(p,eval(mod,obj)))
-  end
-
-#=
-  macro getfrom(p, obj,mod=Main)
+  macro getfrom(p, obj,mod=:Main)
     quote
-      remotecall_fetch(eval,$(esc(p)),$(esc(mod)),$(esc(obj)))
+      remotecall_fetch($(esc(p)),$(esc(mod)),$(QuoteNode(obj))) do m,o
+        println(m); println(o)
+        eval(m,o)
+      end
     end
   end
-=#
+
 
   getfrom(p::Int, nm::Symbol, mod::Module=Main) = fetch(@spawnat(p, getfield(mod, nm)))
 
