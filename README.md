@@ -37,18 +37,18 @@ z = randn(10, 10); sendto(workers(), z=z)
 # Broadcast a value 3 to x on all workers
 @broadcast x 3
 
-# Get an object from named x from Main module on process 2. Name it x
-x = @getfrom 2 x
+# Get an object from named x from Main module on process 2. Name it y
+y = @getfrom 2 x
 # Or
-x = getfrom(2,:x)
+y = getfrom(2,:x)
 
-# Get an object from named x from Foo module on process 2. Name it x
-x = @getfrom 2 x Foo
+# Get an object from named x from Foo module on process 2. Name it y
+y = @getfrom 2 x Foo
 # Or
-x = getfrom(2,:x,Foo)
+y = getfrom(2,:x,Foo)
 
-# Get an object from named foo.x from Foo module on process 2. Name it x
-x = @getfrom 2 foo.x Foo
+# Get an object from named foo.x from Foo module on process 2. Name it y
+y = @getfrom 2 foo.x Foo
 # Using the function will not work!
 
 # pass variable named x from process 2 to all other processes
