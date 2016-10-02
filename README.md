@@ -13,7 +13,8 @@ To install the package, simply use:
 
 ```julia
 Pkg.add("ParallelDataTransfer")
-using ParallelDataTransfer
+addprocs(n) # Adds n processes
+@everywhere using ParallelDataTransfer
 ```
 
 For the most up to date version, checkout master by using:
@@ -66,6 +67,45 @@ passobj(3, 1, [:t, :u, :v])
 #Or
 passobj(1, workers(), [:foo]; from_mod=Foo)
 ```
+
+## Performance Note
+
+Note that this form of passing variables will define the variables in the global
+namespace of the process. Thus, for performance reasons, it's recommended that
+these variables are acted on inside of a function (just like in the REPL). An
+example for doing this is:
+
+```julia
+# Send things to process 2
+@defineat 2 a=5
+@defineat 2 function usea(a)
+  # Do your stuff here
+  ans=a
+end
+# Use the function a on process 2
+@defineat 2 ans=usea(a) # this safely uses the usea and a from process 2
+# Get the answer from process 2
+@getfrom 2 ans
+```
+
+In the "master" process this will define `ans` as a global. Once again, you should
+not work directly with the global since that will degrade the performance. So,
+since you are working in a function, you should assert the type of the variable
+so that way it's strictly typed. For example:
+
+```julia
+function test()
+  @defineat 2 a=5
+  a = (@getfrom 2 a)::Int64 # This won't be typed well
+
+  # Continue in your code using b
+  a
+end
+```
+
+Declaring the type of `a` will work as well. If you put these two design principles
+together (use the passed variables in a function, and type the returns), then your
+code will be parallel and type-stable.
 
 ## Credit
 
