@@ -107,6 +107,8 @@ Declaring the type of `a` will work as well. If you put these two design princip
 together (use the passed variables in a function, and type the returns), then your
 code will be parallel and type-stable.
 
+I am interested in suggestions for making this usage more "automatic". If you have
+design ideas / implementations to recommend, feel free to open issues and submit PRs.
 
 ## Credit
 
