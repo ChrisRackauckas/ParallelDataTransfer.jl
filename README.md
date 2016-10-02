@@ -96,7 +96,7 @@ so that way it's strictly typed. For example:
 ```julia
 function test()
   @defineat 2 a=5
-  a = (@getfrom 2 a)::Int64 # This won't be typed well
+  a = (@getfrom 2 a)::Int64 # This will make a stictly typed
 
   # Continue in your code using b
   a
