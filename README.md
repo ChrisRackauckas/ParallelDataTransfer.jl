@@ -40,6 +40,12 @@ z = randn(10, 10); sendto(workers(), z=z)
 # Broadcast a value 3 to x on all workers
 @broadcast x=3
 
+# Note that @broadcast will broadcast the expression, so
+@broadcast name=val
+# Requires val to be defined on the remote process
+# To pass an object to all worker processes, use
+@passobj 1 workers() name
+
 # Get an object from named x from Main module on process 2. Name it y
 y = @getfrom 2 x
 # Or
