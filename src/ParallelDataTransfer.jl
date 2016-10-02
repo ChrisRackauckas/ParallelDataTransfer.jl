@@ -13,7 +13,6 @@ module ParallelDataTransfer
   macro getfrom(p, obj,mod=:Main)
     quote
       remotecall_fetch($(esc(p)),$(esc(mod)),$(QuoteNode(obj))) do m,o
-        println(m); println(o)
         eval(m,o)
       end
     end
@@ -22,16 +21,12 @@ module ParallelDataTransfer
 
   getfrom(p::Int, nm::Symbol, mod::Module=Main) = fetch(@spawnat(p, getfield(mod, nm)))
 
-#=
-  macro defineat(p,name,val,mod=Main)
+  macro defineat(p,ex,mod=Main)
     quote
-      remotecall_wait((nm,val)->eval($mod,:(nm=val)),$p,$name,$val)
+      remotecall_wait($(esc(p)),$(esc(mod)),$(QuoteNode(ex))) do mod,ex
+        eval(mod,ex)
+      end
     end
-  end
-=#
-
-  macro defineat(p,name,val,mod=Main)
-    wait(@spawnat p eval(mod,:($name=$val)))
   end
 
   function passobj(src::Int, target::Vector{Int}, nm::Symbol;
@@ -84,9 +79,14 @@ module ParallelDataTransfer
       end
   end
 
-  macro broadcast(nm, val)
+  macro broadcast(ex)
       quote
-        sendto(workers(), $nm=$val)
+        @sync for p in workers()
+          println(p)
+          println($(QuoteNode(ex)))
+          println(macroexpand(@defineat p $(QuoteNode(ex))))
+          @defineat p $(QuoteNode(ex))
+        end
       end
   end
 

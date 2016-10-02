@@ -26,20 +26,23 @@ y = @getfrom 2 x
 passobj(2, filter(x->x!=2, procs()), :x)
 @test x==1
 
-@defineat 3 x 3
+@defineat 3 x=3
 xhome = @getfrom(3, x)
 @test xhome == 3
 
 @passobj(3, filter(x->x!=3, procs()), x)
 @test x==3
 
-@defineat 3 x 5
+@defineat 3 x=5
 @passobj(3,1,x)
 @test x==5
 
-@broadcast x 6
-@passobj(4,1,x)
+#=
+@broadcast x=6
+@getfrom 4 x
+#@passobj(4,1,x)
 @test x==6
+=#
 
 # pass variables t, u, v from process 3 to process 1
 @spawnat 3 eval(:(t=1))

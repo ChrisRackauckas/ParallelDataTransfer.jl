@@ -34,10 +34,10 @@ sendto([1, 2], x=100, y=rand(2, 3))
 z = randn(10, 10); sendto(workers(), z=z)
 
 # Create the variable x with a value 3 directly on process 4
-@defineat 4 x 3
+@defineat 4 x=3
 
 # Broadcast a value 3 to x on all workers
-@broadcast x 3
+@broadcast x=3
 
 # Get an object from named x from Main module on process 2. Name it y
 y = @getfrom 2 x
