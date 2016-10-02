@@ -107,6 +107,7 @@ Declaring the type of `a` will work as well. If you put these two design princip
 together (use the passed variables in a function, and type the returns), then your
 code will be parallel and type-stable.
 
+
 ## Credit
 
 Lots of credit goes to [the StackExchange users who developed some of the original solutions.](http://stackoverflow.com/questions/27677399/julia-how-to-copy-data-to-another-processor-in-julia).
