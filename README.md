@@ -118,8 +118,9 @@ design ideas / implementations to recommend, feel free to open issues and submit
 
 ## Credit
 
-Lots of credit goes to [the StackExchange users who developed some of the original solutions.](http://stackoverflow.com/questions/27677399/julia-how-to-copy-data-to-another-processor-in-julia).
-This package adds some tests to ensure that these functions continue to work properly,
-updated them to v0.5, and adds some macros to unify the API (also avoids issues
-that came up with original functions and generalizes them a bit).
+Lots of credit goes to [the StackExchange users who developed some of the original solutions](http://stackoverflow.com/questions/27677399/julia-how-to-copy-data-to-another-processor-in-julia).
+This package adds tests to ensure that these functions continue to work properly,
+updated the functions to v0.5, and adds macros to unify the API (also avoids issues
+that came up with original functions and generalizes them a bit). The functions have also been
+made more robust by adding safety measures: syncing is built into the commands.
 Special thanks to @TotalVerb and @oxinabox for help via Gitter.
