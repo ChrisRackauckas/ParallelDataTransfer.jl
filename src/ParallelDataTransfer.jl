@@ -81,12 +81,9 @@ module ParallelDataTransfer
 
   macro broadcast(ex)
       quote
-        @sync for p in workers()
-          println(p)
-          println($(QuoteNode(ex)))
-          println(macroexpand(@defineat p $(QuoteNode(ex))))
-          @defineat p $(QuoteNode(ex))
-        end
+          for p in workers()
+              @defineat p $(esc(ex))
+          end
       end
   end
 

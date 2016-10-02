@@ -37,12 +37,9 @@ xhome = @getfrom(3, x)
 @passobj(3,1,x)
 @test x==5
 
-#=
 @broadcast x=6
-@getfrom 4 x
-#@passobj(4,1,x)
+@passobj(4,1,x)
 @test x==6
-=#
 
 # pass variables t, u, v from process 3 to process 1
 @spawnat 3 eval(:(t=1))
