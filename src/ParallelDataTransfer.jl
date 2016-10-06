@@ -81,8 +81,8 @@ module ParallelDataTransfer
 
   macro broadcast(ex)
       quote
-          for p in workers()
-              @defineat p $(esc(ex))
+          @sync for p in workers()
+              @async @defineat p $(esc(ex))
           end
       end
   end
