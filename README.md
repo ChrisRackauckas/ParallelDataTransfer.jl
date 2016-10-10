@@ -5,7 +5,7 @@
 [![codecov](https://codecov.io/gh/ChrisRackauckas/ParallelDataTransfer.jl/branch/master/graph/badge.svg)](https://codecov.io/gh/ChrisRackauckas/ParallelDataTransfer.jl)
 [![coveralls](https://coveralls.io/repos/github/ChrisRackauckas/ParallelDataTransfer.jl/badge.svg)](https://coveralls.io/github/ChrisRackauckas/ParallelDataTransfer.jl)
 
-A bunch of helper functions for transferring data between worker processes.
+A bunch of helper functions for transferring data between worker processes. The functions are robust with safety measures built into the commands, and the package is thoroughly tested to ensure correctness (with an unsafe API coming soon). As such, this commands thus allow for rapid development and prototyping of parallel algorithms. The underlying infrustructure is Julia's native multiprocess parallelism, meaning that no dependencies are required for use other than Base Julia.
 
 ## Installation
 
@@ -118,9 +118,4 @@ design ideas / implementations to recommend, feel free to open issues and submit
 
 ## Credit
 
-Lots of credit goes to [the StackExchange users who developed some of the original solutions](http://stackoverflow.com/questions/27677399/julia-how-to-copy-data-to-another-processor-in-julia).
-This package adds tests to ensure that these functions continue to work properly,
-updated the functions to v0.5, and adds macros to unify the API (also avoids issues
-that came up with original functions and generalizes them a bit). The functions have also been
-made more robust by adding safety measures: syncing is built into the commands.
-Special thanks to @TotalVerb and @oxinabox for help via Gitter.
+This library is developed and maintained by Chris Rackauckas. However, kudos go to @spencerlyon2 and @conjectures for developing some [of the original solutions](http://stackoverflow.com/questions/27677399/julia-how-to-copy-data-to-another-processor-in-julia) which were modified and expanded upon for this library. Special thanks to @TotalVerb and @oxinabox for help via Gitter.
