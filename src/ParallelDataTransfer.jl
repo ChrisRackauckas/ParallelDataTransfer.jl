@@ -39,24 +39,9 @@ module ParallelDataTransfer
       nothing
   end
 
-  macro passobj(src::Int, target, val, tomod=:Main)
+  macro passobj(src::Int, target, val, from_mod=:Main, tomod=:Main)
     quote
-      r = Future($(esc(src)))
-      remotecall_wait($(esc(src)), r) do r_i
-          put!(r_i, $(esc(val)))
-      end
-      if typeof($(esc(target))) <: AbstractArray
-        target_vec = $(esc(target))
-      else
-        target_vec = [$(esc(target))]
-      end
-      futures = map(target_vec) do to
-          remotecall(to, r) do r_i
-              isready(r_i)
-              eval($(esc(tomod)), Expr(:(=), $(QuoteNode(val)), fetch(r_i)))
-          end
-      end
-      map(wait, futures) #Wait till all are done
+      passobj($(esc(src)), $(esc(target)), $(QuoteNode(val)); from_mod=$from_mod, to_mod=$tomod)
     end
   end
 
