@@ -30,15 +30,15 @@ passobj(2, filter(x->x!=2, procs()), :x)
 xhome = @getfrom(3, x)
 @test xhome == 3
 
-@passobj(3, filter(x->x!=3, procs()), x)
+@passobj 3 filter(x->x!=3, procs()) x
 @test x==3
 
 @defineat 3 x=5
-@passobj(3,1,x)
+@passobj 3 1 x
 @test x==5
 
 @broadcast x=6
-@passobj(4,1,x)
+@passobj 4 1 x
 @test x==6
 
 # pass variables t, u, v from process 3 to process 1
@@ -72,8 +72,8 @@ bar_vec = [Bar(rand(3),rand(3),rand(3)) for n in 1:3]
 sendto(workers(),bar_vec=bar_vec)
 @test @getfrom(2,bar_vec[3].c) == bar_vec[3].c
 
-remotecall(2, ()->Main.bar_vec[3].c=ones(3))
-mybar_3c1 = remotecall_fetch(2, ()->Main.bar_vec[3].c)
+remotecall(()->Main.bar_vec[3].c=ones(3),2)
+mybar_3c1 = remotecall_fetch(()->Main.bar_vec[3].c,2)
 @test mybar_3c1 == ones(3)
 mybar_3c2 = @getfrom(2,bar_vec[3].c)
 @test mybar_3c2 == ones(3)
