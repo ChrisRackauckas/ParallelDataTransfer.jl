@@ -29,7 +29,7 @@ module ParallelDataTransfer
     end
   end
 
-  function passobj(src::Int, target::Vector{Int}, nm::Symbol;
+  function passobj(src::Int, target::AbstractVector{Int}, nm::Symbol;
                    from_mod=Main, to_mod=Main)
       r = RemoteChannel(src)
       @spawnat(src, put!(r, getfield(from_mod, nm)))
@@ -58,7 +58,7 @@ module ParallelDataTransfer
       end
   end
 
-  function sendto(ps::Vector{Int}; args...)
+  function sendto(ps::AbstractVector{Int}; args...)
       for p in ps
           sendto(p; args...)
       end
