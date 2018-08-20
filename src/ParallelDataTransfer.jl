@@ -65,15 +65,13 @@ module ParallelDataTransfer
       end
   end
 
-  # This produces the error "invalid let syntax"
-  
-  # macro broadcast(ex)
-  #     quote
-  #         @sync for p in workers()
-  #             @async @defineat p $(esc(ex))
-  #         end
-  #     end
-  # end
+  macro broadcast(ex)
+     quote
+         for p in workers()
+             @defineat p $(ex)
+         end
+     end
+  end
 
   export sendtosimple, @sendto, sendto, getfrom, passobj,
          @broadcast, @getfrom, @passobj, @defineat
