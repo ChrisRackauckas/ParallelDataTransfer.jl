@@ -1,0 +1,6 @@
+authors = [""]
+name = "ParallelDataTransfer"
+uuid = "cd9b9916-a410-11e8-0390-65ca2980711c"
+version = "0.1.0"
+
+[deps]

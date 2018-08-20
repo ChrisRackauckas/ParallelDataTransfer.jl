@@ -37,7 +37,7 @@ z = randn(10, 10); sendto(workers(), z=z)
 # Create the variable x with a value 3 directly on process 4
 @defineat 4 x=3
 
-# Broadcast a value 3 to x on all workers
+# Broadcast a value 3 to x on all workers (not working on Julia 0.7)
 @broadcast x=3
 
 # Note that @broadcast will broadcast the expression, so
