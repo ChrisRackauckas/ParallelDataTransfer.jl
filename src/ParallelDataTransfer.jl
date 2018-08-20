@@ -1,19 +1,20 @@
 module ParallelDataTransfer
+  using Distributed
 
   function sendtosimple(p::Int, nm, val)
-      ref = @spawnat(p, eval(Main, Expr(:(=), nm, val)))
+      ref = @spawnat(p, Core.eval(Main, Expr(:(=), nm, val)))
   end
 
   function sendto(p::Int; args...)
       for (nm, val) in args
-          @spawnat(p, eval(Main, Expr(:(=), nm, val)))
+          @spawnat(p, Core.eval(Main, Expr(:(=), nm, val)))
       end
   end
 
   macro getfrom(p, obj,mod=:Main)
     quote
       remotecall_fetch($(esc(p)),$(esc(mod)),$(QuoteNode(obj))) do m,o
-        eval(m,o)
+        Core.eval(m,o)
       end
     end
   end
@@ -24,7 +25,7 @@ module ParallelDataTransfer
   macro defineat(p,ex,mod=Main)
     quote
       remotecall_wait($(esc(p)),$(esc(mod)),$(QuoteNode(ex))) do mod,ex
-        eval(mod,ex)
+        Core.eval(mod,ex)
       end
     end
   end
@@ -34,7 +35,7 @@ module ParallelDataTransfer
       r = RemoteChannel(src)
       @spawnat(src, put!(r, getfield(from_mod, nm)))
       @sync for to in target
-          @spawnat(to, eval(to_mod, Expr(:(=), nm, fetch(r))))
+          @spawnat(to, Core.eval(to_mod, Expr(:(=), nm, fetch(r))))
       end
       nothing
   end
@@ -64,13 +65,15 @@ module ParallelDataTransfer
       end
   end
 
-  macro broadcast(ex)
-      quote
-          @sync for p in workers()
-              @async @defineat p $(esc(ex))
-          end
-      end
-  end
+  # This produces the error "invalid let syntax"
+  
+  # macro broadcast(ex)
+  #     quote
+  #         @sync for p in workers()
+  #             @async @defineat p $(esc(ex))
+  #         end
+  #     end
+  # end
 
   export sendtosimple, @sendto, sendto, getfrom, passobj,
          @broadcast, @getfrom, @passobj, @defineat
