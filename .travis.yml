@@ -11,8 +11,8 @@ matrix:
     - julia: nightly
 notifications:
   email: false
-script:
-  - if [[ -a .git/shallow ]]; then git fetch --unshallow; fi
-  - julia -e 'Pkg.clone(pwd()); Pkg.build("ParallelDataTransfer"); Pkg.test("ParallelDataTransfer"; coverage=true)'
-  - julia -e 'cd(Pkg.dir("ParallelDataTransfer")); Pkg.add("Coverage"); using Coverage; Codecov.submit(Codecov.process_folder())'
-  - julia -e 'cd(Pkg.dir("ParallelDataTransfer")); Pkg.add("Coverage"); using Coverage; Coveralls.submit(process_folder())'
+#script:
+#  - if [[ -a .git/shallow ]]; then git fetch --unshallow; fi
+#  - julia -e 'Pkg.clone(pwd()); Pkg.build("ParallelDataTransfer"); Pkg.test("ParallelDataTransfer"; coverage=true)'
+#  - julia -e 'cd(Pkg.dir("ParallelDataTransfer")); Pkg.add("Coverage"); using Coverage; Codecov.submit(Codecov.process_folder())'
+#  - julia -e 'cd(Pkg.dir("ParallelDataTransfer")); Pkg.add("Coverage"); using Coverage; Coveralls.submit(process_folder())'
