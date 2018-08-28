@@ -83,3 +83,20 @@ mybar_3c1 = remotecall_fetch(()->Main.bar_vec[3].c,2)
 @test mybar_3c1 == ones(3)
 mybar_3c2 = @getfrom(2,bar_vec[3].c)
 @test mybar_3c2 == ones(3)
+
+path, io = mktemp() # Create temp file and store some definitions
+println(io, "__f(x) = x")
+println(io, "__g(x) = x")
+close(io)
+
+w = workers()
+include_remote(path, w[1]) # Include file at remote
+@test remotecall_fetch(()->@isdefined(__f), w[1])
+@test remotecall_fetch(()->@isdefined(__g), w[1])
+@test remotecall_fetch(()->!@isdefined(__f), w[2])
+include_remote(path, w) # Include on all remotes
+for w in w
+    @test remotecall_fetch(()->@isdefined(__f), w)
+    @test remotecall_fetch(()->@isdefined(__g), w)
+end
+rm(path)

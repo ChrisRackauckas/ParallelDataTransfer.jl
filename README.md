@@ -72,6 +72,9 @@ passobj(3, 1, [:t, :u, :v])
 @passobj 1 workers() Foo.foo
 #Or
 passobj(1, workers(), [:foo]; from_mod=Foo)
+
+# Include a file on a path not available on a remote worker
+include_remote(path, 2)
 ```
 
 ## Performance Note
