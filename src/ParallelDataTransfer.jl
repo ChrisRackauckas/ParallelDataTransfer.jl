@@ -73,6 +73,24 @@ module ParallelDataTransfer
      end
   end
 
+  """
+    include_remote(path, [workers=workers()])
+  Includes a file which is not available on a remote worker by reading the file at the main node, parsing the text and evaluating the code on the remote workers listed in `workers`
+  """
+  function include_remote(path, workers=workers())
+      open(path) do f
+          text = readstring(f)
+          s    = 1
+          while s <= length(text)
+              ex, s = parse(text, s)
+              for w in workers
+                  @spawnat w @eval $ex
+              end
+          end
+      end
+  end
+
+
   export sendtosimple, @sendto, sendto, getfrom, passobj,
-         @broadcast, @getfrom, @passobj, @defineat
+         @broadcast, @getfrom, @passobj, @defineat, include_remote
 end # module
