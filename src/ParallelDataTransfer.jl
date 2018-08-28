@@ -79,10 +79,10 @@ module ParallelDataTransfer
   """
   function include_remote(path, workers=workers())
       open(path) do f
-          text = readstring(f)
+          text = read(f, String)
           s    = 1
           while s <= length(text)
-              ex, s = parse(text, s)
+              ex, s = Meta.parse(text, s)
               for w in workers
                   @spawnat w @eval $ex
               end

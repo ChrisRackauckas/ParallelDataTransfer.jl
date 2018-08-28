@@ -91,12 +91,12 @@ close(io)
 
 w = workers()
 include_remote(path, w[1]) # Include file at remote
-@test remotecall_fetch(()->isdefined(:__f), w[1])
-@test remotecall_fetch(()->isdefined(:__g), w[1])
-@test remotecall_fetch(()->!isdefined(:__f), w[2])
+@test remotecall_fetch(()->@isdefined(__f), w[1])
+@test remotecall_fetch(()->@isdefined(__g), w[1])
+@test remotecall_fetch(()->!@isdefined(__f), w[2])
 include_remote(path, w) # Include on all remotes
 for w in w
-    @test remotecall_fetch(()->isdefined(:__f), w)
-    @test remotecall_fetch(()->isdefined(:__g), w)
+    @test remotecall_fetch(()->@isdefined(__f), w)
+    @test remotecall_fetch(()->@isdefined(__g), w)
 end
 rm(path)
