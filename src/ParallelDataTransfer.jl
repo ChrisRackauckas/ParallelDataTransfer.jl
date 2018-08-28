@@ -74,17 +74,17 @@ module ParallelDataTransfer
   end
 
   """
-    include_remote(path, [workers=workers()])
+    include_remote(path, [workers=workers()]; module=Main)
   Includes a file which is not available on a remote worker by reading the file at the main node, parsing the text and evaluating the code on the remote workers listed in `workers`
   """
-  function include_remote(path, workers=workers())
+  function include_remote(path, workers=workers(); mod=Main)
       open(path) do f
           text = read(f, String)
           s    = 1
           while s <= length(text)
               ex, s = Meta.parse(text, s)
               for w in workers
-                  @spawnat w @eval $ex
+                  @spawnat w Core.eval(mod, ex)
               end
           end
       end
