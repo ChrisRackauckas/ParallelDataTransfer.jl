@@ -1,0 +1,17 @@
+name = "ParallelDataTransfer"
+uuid = "2dcacdae-9679-587a-88bb-8b444fb7085b"
+authors = ["SciML"]
+version = "0.5.1"
+
+[deps]
+Distributed = "8ba89e20-285c-5b6f-9357-94700520ee1b"
+
+[compat]
+julia = "1.6"
+
+[extras]
+Random = "9a3f8284-a2c9-5f02-9a11-845980a1fd5c"
+Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
+
+[targets]
+test = ["Random", "Test"]
