@@ -91,6 +91,6 @@ module ParallelDataTransfer
   end
 
 
-  export sendtosimple, @sendto, sendto, getfrom, passobj,
+  export sendtosimple, sendto, getfrom, passobj,
          @broadcast, @getfrom, @passobj, @defineat, include_remote
 end # module
